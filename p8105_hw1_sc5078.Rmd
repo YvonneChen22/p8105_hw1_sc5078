@@ -1,0 +1,81 @@
+---
+title: "p8105_hw1_sc5078"
+author: "Yvonne Chen"
+date: "2023-09-22"
+output: html_document
+---
+
+# Problem 1
+Load the moderndive library
+```{r setup, include = FALSE}
+library(moderndive)
+```
+Load the dataset
+```{r dataset}
+## Load the dataset
+data("early_january_weather")
+
+## Explore the size of dataset
+nrow(early_january_weather)
+ncol(early_january_weather)
+
+# Find the mean temperature
+mean(early_january_weather$temp)
+
+# There are 15 variables in the "early january weather" dataset, including information about weather station (origin), time of recording (year, month, day, hour), Temperature and dewpoint in F (temp, dewp), relative humidity(humid), wind direction in degrees (wind_dir), speed (wind_speed) and gust (wind_gust) speed in mph, precipitation in inches (precip), sea level pressure in millibars (pressure), visibility in miles (visib), and date and hour of the recording as a POSIXct date (time_hour). There are 358 rows and 15 columns in the dataset.The main temperature of the dataset is 39.58212 F.
+
+# Scatterplot of temp (y) vs time_hour (x), color points using the humid variable
+ggplot(data = early_january_weather, mapping = aes(y = temp, x = time_hour, color = humid))+geom_point()
+
+# Export scatterplot to project directory
+ggsave("problem1_scatterplot.pdf", height = 4, width = 6)
+
+# Generally, there is a positive linear association between temperature and date and hour of the recording, as time_hour increase, so does temp. There isn't a clear pattern between relative humidity and temperature, but the relative humidity is high between Jan 12 to Jan 14 with light blue color.
+```
+
+# Problem 2
+```{r dataframe}
+## set seed to ensure reproducibility
+set.seed(333)
+
+## set a random sample of size 10 from a standard Normal distribution
+first_column <- rnorm(10)
+
+## set a logical vector indicating whether elements of the sample are greater than 0
+second_column <- first_column > 0
+
+## set a character vector of length 10
+third_column <- c("apple", "banana", "pineapple", "peach", "strawberry", "mango", "blueberry", "grape", "grapefruit", "cherry")
+
+## set a factor vector of length 10, with 3 different factor “levels”
+fourth_column <- c("sweet", "very sweet", "not sweet", "sweet", "not sweet", "very sweet", "not sweet", "very sweet", "not sweet", "very sweet")
+
+## create a dataframe
+df <- data.frame(first_column, second_column, third_column, fourth_column)
+
+## take the mean of each variable
+## mean for random sample -- works
+mean(pull(df, 1))
+
+## mean for logical vector -- works
+mean(pull(df, 2))
+
+## mean for character vector -- does not work
+mean(pull(df, 3))
+
+## mean for factor vector -- does not work
+mean(pull(df, 4))
+```
+
+```{r eval=FALSE, convert variables}
+## apply as.numeric function to logical vector
+as.numeric(pull(df, 2))
+
+## apply as.numeric function to character vector
+as.numeric(pull(df, 3))
+
+## apply as.numeric function to factor vector
+as.numeric(pull(df, 4))
+
+## When apply as.numeric function to the logical vector, it successfully convert to numeric value, ture = 1 and false = 0, so that we can get the mean value. However, when apply as.numeric function to the character and factor vector, they can't convert to numeric values so that we can't get the mean value.
+```
